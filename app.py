@@ -5,7 +5,7 @@ from flask_socketio import SocketIO, emit
 import numpy as np
 import requests
 from datetime import datetime
-from fbprophet import Prophet
+
 import pandas as pd
 from helper_v4 import forecastr,determine_timeframe,get_summary_stats,validate_model,preprocessing
 import logging
@@ -41,13 +41,9 @@ def add_header(r):
 
 # Flask App
 
-@app.route('/app/')
+@app.route('/')
 def index():
     return render_template('build-forecast-v3.html') # Application
-
-@app.route('/')
-def about():
-    return render_template('forecastr.html') # Product Page
 
 
 @socketio.on('connection_msg')
@@ -78,7 +74,7 @@ def forecast_settings(message):
     forecast_settings = data[0]
     freq = data[2]
     column_headers = data[1]['data'][0]
-
+    print(data)
     # Format the date and metric unit
     time_unit = column_headers[0]
     print(time_unit)
@@ -213,4 +209,4 @@ def main(message):
 
 
 if __name__ == '__main__':
-    socketio.run(app, log_output=False)
+    socketio.run(app,debug=True)

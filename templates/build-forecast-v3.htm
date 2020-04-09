@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Forecastr App: Let's Build a Time Series Forecast</title>
@@ -83,11 +83,9 @@
                     <div class="tab-content">
 
                       <div id="step1" class="tab-pane fade in active">
-			
-                        <div class='main-content'>
-				
 
-                        
+                        <div class='main-content'>
+
                             <h3 class='step-title'>STEP 1: UPLOAD A CSV</h3><br/>
                             <h5>ABOUT CSV FORMAT</h5><br/>
                             <p>Your file should contain 2 columns and look something like this (when viewing in excel):</p><br/>
@@ -163,10 +161,10 @@
                         <div id='user-messaging'>
 
                             <p id='error-message'></p>
-				
-                        	<a id='reload-button' href="#">TRY AGAIN</a>
+                            <a id='reload-button' href="#">TRY AGAIN</a>
 
                         </div>
+
                         <h3 class='step-title'>REVIEW DATA: PRE-FORECAST</h3>
                         <br>
 
@@ -282,10 +280,8 @@
                                 <li class='arguments'>
                                     <select class='dd-menu' placeholder='Model Type' id='arg-forecast-model'>
                                       <option value="" selected disabled>FORECAST MODEL TYPE</option>
-                                      <option value="linear">Moving Average</option>
-                                      <option value="logistic">SARIMA</option>
-					<option value="logistic">ARIMA</option>
-					<option value="logistic">SARIMAX</option>
+                                      <option value="linear">LINEAR</option>
+                                      <option value="logistic">LOGISTIC</option>
                                     </select>
                                 </li>
                                 <li class='arguments'>

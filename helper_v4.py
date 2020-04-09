@@ -1,6 +1,4 @@
-from fbprophet import Prophet
-from fbprophet.diagnostics import cross_validation
-from fbprophet.diagnostics import performance_metrics
+
 import pandas as pd
 import numpy as np
 from flask_socketio import SocketIO, emit
@@ -400,15 +398,13 @@ def preprocessing(data):
         print(null_rows)
         # Need to add 2 to each value in null_rows because there
 
-        print('######### ROWS + 2 = ACTUAL ROW NUMBERS IN CSV ##############')
+        #print('######### ROWS + 2 = ACTUAL ROW NUMBERS IN CSV ##############')
         update_these_rows = []
         for x in null_rows:
-            update_these_rows.append(int(x)+2)
-
+            update_these_rows.append(int(x))
+        print("aaa")
         print(update_these_rows)
-
         emit('error', {'data': update_these_rows})
-
 
 
 

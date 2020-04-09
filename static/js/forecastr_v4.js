@@ -11,7 +11,7 @@ $(document).ready(function(){
     // **** Connect SocketIO **** //
 
     // start up a SocketIO connection to the server - http(s):// needs to be set as http when run locally, and https when pushed to production.
-    var socket = io.connect('https://' + document.domain + ':' + location.port);
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
 
     // The callback function is invoked when a connection with the server is established.
     socket.on('connect', function() {
@@ -45,16 +45,7 @@ $(document).ready(function(){
             // Send the data to a python script app.py to process basic statistics on it
             socket.emit('send_csv', {data:csvdata});
 
-            // ****** GOOGLE ANALYTICS EVENT ****** //
-
-            window.dataLayer.push({'event': 'step1-file-uploaded'});
-
-            // After data has been emitted, send the user to the second tab called Step 2: Review Data + Setup Model
-            $('.nav-tabs a[href="#step2"]').tab('show');
-
-            // Then make sure the user is at the top of the page, by scrolling to coordinates (0,0)
-            window.scrollTo(0, 0);
-
+           
           }
         });
 
@@ -216,14 +207,7 @@ $(document).ready(function(){
 
 
 
-        // ****** GOOGLE ANALYTICS EVENT ****** //
-
-        // Send this event to the data layer indicating that the original data has been successfully rendered on Step 2.
-        window.dataLayer.push({'event': 'step2-pre-forecast-chart-rendered'});
-
-
-        // TO DO: On click of the logistic option, unhide the upper and lower bounds or saturation points.
-
+        
 
 
         // ****** On click of the Generate Forecast CTA on Step 2 ***** //
@@ -286,11 +270,7 @@ $(document).ready(function(){
             socket.emit('forecast_settings', {data:settings});
 
 
-            // ****** GOOGLE ANALYTICS EVENT ****** //
-
-            // Send this event to the data layer signifying that the user has clicked the Forecast CTA
-            window.dataLayer.push({'event': 'step2-generate-forecast-cta'});
-
+            
 
             // Send the user to the 3rd tab called Step 3: View Forecast, display loading gif and scroll the window to the top of the page.
             $('.nav-tabs a[href="#step3"]').tab('show');                        // Send user to Step 3: View Forecast Tab
@@ -468,12 +448,7 @@ $(document).ready(function(){
 
 
 
-        // ****** GOOGLE ANALYTICS EVENT ****** //
-
-        // Send an event to the data layer indicating that the forecast chart has been successfully rendered on Step 3: View Forecast
-        window.dataLayer.push({'event': 'step3-render-forecast',
-                              'dimension1': time_to_render_forecast
-                              });
+       
 
 
         // ************ Original Dataset Shape ***************** //
@@ -500,7 +475,7 @@ $(document).ready(function(){
             // Declare Updated Variables to be used in forecast settings: u_ stands for "updated" + setting
 
             var u_forecast_length = $('#forecast-length').val();                                // forecast length in time units of days, months, years
-            var u_model_type = $( "#arg-forecast-model option:selected" ).val();                // Model Type: Linear or logistic
+            var u_model_type = $( "#arg-forecast-model option:selected" ).val();                // Model Type: ma,sarima,arima,sarimax
             var u_capacity = $('#update-capacity').val();                                       // Upper Limit (used in Logistic model)
             var u_min_saturation = $('#update-min-saturation').val();                           // Lower Limit (used in Logistic model)
             var u_seasonality_mode = $( "#arg-seasonality-mode option:selected" ).val();        // Seasonality mode: daily, monthly, yearly
@@ -721,7 +696,7 @@ $(document).ready(function(){
 
         // Update UI with error notice
         $('#user-messaging').css({display:"block"});
-        $('#error-message').html('<b>Error: </b> Whoops! You may want to check the following rows in your csv for null values: <br/>' + 'Row #: ' + error_data)
+        $('#error-message').html('<b>Error: </b> Whoops! Data contains null values! Please use one of the filling methods or fill them manually : <br/>' + 'Row #: ' + error_data)
 
     });
 
