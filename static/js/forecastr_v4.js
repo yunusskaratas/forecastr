@@ -233,7 +233,7 @@ $(document).ready(function(){
             var time_units = $('#days-to-forecast').val();                  // Eg. Number of days to forecast out
             var upper = $('#upper-limit').val();                            // Upper Limit used in logistic forecast
             var lower = $('#lower-limit').val();                            // Lower Limit used in logistic forecast
-
+	    var test_day= $("#test-day").val();
 
             // Let's push settings to the selected array
 
@@ -246,6 +246,7 @@ $(document).ready(function(){
 
             // Push time_units, upper and lower values for logistic forecast (if any)
             selected.push(time_units);
+	    selected.push(test_day);
             selected.push(upper);
             selected.push(lower);
 
@@ -343,9 +344,9 @@ $(document).ready(function(){
         forecast_settings = arr[3]                  // forecast settings
         var model_type = forecast_settings[0]       // model type: linear or logistic
         var forecast_length = forecast_settings[1]  // length of forecast in days, months, years
-        var capacity = forecast_settings[2]         // Upper Limit (used with logistic model)
-        var min_saturation = forecast_settings[3]   // Lower Limit (used with logistic model)
-
+        var capacity = forecast_settings[3]         // Upper Limit (used with logistic model)
+        var min_saturation = forecast_settings[4]   // Lower Limit (used with logistic model)
+	//['SARIMA', '4', '4', '', '', 'auto', 'auto', [False, False, False], 'auto', 'auto']
         // We'll
 
         var forecasted_vals = arr[8]
@@ -390,8 +391,9 @@ $(document).ready(function(){
 
 
         // Now let's render the forecast
-
+	
         var ctx = document.getElementById("myChart").getContext('2d');
+	
         var myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -527,7 +529,7 @@ $(document).ready(function(){
 
 
             // IMPORTANT: Set data_for_csv_export to blank so not to store multiple csvs for download.
-            data_for_csv_export = '';
+           //data_for_csv_export = '';
 
 
         }); // end of update-chart function

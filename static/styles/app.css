@@ -239,7 +239,7 @@
             border:none;
             list-style: none;
             position:relative;
-            top:-45px;
+            top:50px;
             width:100%;
 
 
@@ -251,7 +251,7 @@
             border-top: solid 1px #ddd;
             border-width: thin;
             height: 120px;
-            padding-top: 20px;
+            padding-top:-100px;
             position: relative;
             top: -35px;
 
@@ -723,7 +723,7 @@
         .side-nav-title {
 
             position: relative;
-            top: -45px;
+            top: -50px;
             left: 75px;
 
         }

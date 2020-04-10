@@ -197,21 +197,25 @@
                                 <h5 class='sub-header'><b>Forecast Length</b></h5>
                                 <p>How many <span id='timeframe'>days</span> do you want to forecast out?</p>
                                 <input id="days-to-forecast" type="number"><br><br>
+				<p>Determine the test day period to get the best model:</p>
+				<input id="test-day" type="number"><br><br>
                             </div>
 
                             <div id='forecast-model-type'>
 
                                 <h5 class='sub-header'>Forecast Model</h5>
                                 <p>What type of forecasting model would you like to use?</p>
-                                <input class='option' type="radio" name="selection" value="linear"> Linear<br>
-                                <input class='option' type="radio" name="selection" value="logistic"> Logistic<br><br>
+                                <input class='option' type="radio" name="selection" value="Moving_Average"> Moving Average <br><br>
+                                <input class='option' type="radio" name="selection" value="SARIMA"> SARIMA<br><br>
+				<input class='option' type="radio" name="selection" value="SARIMAX"> SARIMA with additional input<br><br>
 
 
-                                <p id="logistic-option-text">By selecting a logistic forecast, you are required to set upper and lower saturation points.<a href="#">What's this?</a></p>
 
-                                Upper: <input id="upper-limit" type="number"><br>
-                                Lower: <input id="lower-limit" type="number"><br><br>
-
+                                <p id="logistic-option-text">By selecting moving average, you are required to set window length.<a href="#">What's this?</a></p>
+				Window Length: <input id="window_length" type="number"><br><br>
+                                Upper        : <input id="upper-limit" type="number"><br><br>
+                                Lower        : <input id="lower-limit" type="number"><br><br>
+				
                             </div>
 
                             <button id="generate-forecast">GENERATE FORECAST</button>

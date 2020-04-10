@@ -1,6 +1,6 @@
 # Import Modules
 
-from flask import Flask, render_template
+from flask import Flask, render_template,make_response
 from flask_socketio import SocketIO, emit
 import numpy as np
 import requests
@@ -11,7 +11,10 @@ from helper_v4 import forecastr,determine_timeframe,get_summary_stats,validate_m
 import logging
 import time
 
+class DataStore():
+    dataframe=pd.DataFrame()
 
+my_data_lütfen = DataStore()
 
 # Socket IO Flask App Setup
 
@@ -43,6 +46,7 @@ def add_header(r):
 
 @app.route('/')
 def index():
+    
     return render_template('build-forecast-v3.html') # Application
 
 
@@ -63,7 +67,7 @@ def forecast_settings(message):
     data = message['data']
 
     # Keep Original Data in Exisiting Structure
-    original_dataset = data[1]['data'][1]['data']
+    original_dataset = data[1]['data'][1]['data'] #içinde original data var
 
     #print("******************** ORIGINAL DATASET *****************************")
     #print(original_dataset)
@@ -71,19 +75,20 @@ def forecast_settings(message):
 
     # Extract info from forecast_settings message
     time_series_data = pd.DataFrame(data[1]['data'][1]['data'])
-    forecast_settings = data[0]
+    forecast_settings = data[0] 
     freq = data[2]
     column_headers = data[1]['data'][0]
-    print(data)
+    
     # Format the date and metric unit
     time_unit = column_headers[0]
-    print(time_unit)
+    
     time_series_data[time_unit] = time_series_data[time_unit].apply(lambda x: pd.to_datetime(str(x)))
     metric = column_headers[1]
-
+    print("Hi, I am in the forecast_settings and the settings are:")
+    print(forecast_settings)
     # y (aka as "the original data for the metric being forecasted") will be used in the chartjs line graph
     y = time_series_data[metric].tolist()
-
+    print(time_series_data.head())
     # Use Facebook Prophet through forecastr method
     forecast = forecastr(time_series_data,forecast_settings,column_headers,freq,build_settings)
 
@@ -94,13 +99,24 @@ def forecast_settings(message):
     csv_export = forecast[3]
     forecasted_vals = forecast[4]
     forecasted_vals_mean = forecast[5]
-
-
+    data_new=forecast[6] #dataframe_format
+    print("dates:",dates)
+    print("yhat:",len(y_hat))
+    print("y:",len(y))
+    #print("forecast_settings:",forecast_settings)
+    print("column headers:",column_headers)
+    #print("original_dataset:",original_dataset)
+    #print("csv_export:",csv_export)
     # Send data back to the client
-    data_back_to_client = [dates,y_hat,y,forecast_settings,column_headers,freq,original_dataset,csv_export, forecasted_vals, forecasted_vals_mean]
-    #print(data_back_to_client)
+    data_back_to_client = [dates,y_hat,y,forecast_settings,column_headers,freq,original_dataset,csv_export]
+    
 
-
+    my_data_lütfen.dataframe=data_new
+    df=my_data_lütfen.dataframe
+    processed_df = make_response(df.to_csv(sep = ';'))
+    processed_df.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    processed_df.headers["Content-Type"] = "text/csv"
+    processed_df
     emit('render_forecast_chart', {'data': data_back_to_client})
 
 
