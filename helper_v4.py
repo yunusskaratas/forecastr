@@ -66,7 +66,7 @@ def forecastr(data,forecast_settings,column_headers,freq_val,build_settings):
     metric = column_headers[1]                              # metric name
 
     # Rename the columns so we can use FB Prophet
-    data.rename(columns={dimension: "date", metric: "y"}, inplace=True)
+    data.rename(columns={dimension: "ds", metric: "y"}, inplace=True)
    
     
     # Hyper-parameters
@@ -106,17 +106,25 @@ def forecastr(data,forecast_settings,column_headers,freq_val,build_settings):
         print('no cap or floor needed as it is a linear model.')
 '''
     # Let's predict the future :)
-    y_forecast = model.forecast(fs_forecast_period+1).tolist()
+    
+    y_forecast=model.forecast(fs_forecast_period+2).tolist()
+    
     y_hat=model.predict().tolist()
+    y_hat=y_hat[1:]
     preds=y_hat+y_forecast
+    print("forecast length",len(y_forecast))
+    print("actual length",len(y_hat))
+    print("total pred length",len(preds))
     ##### Send y_hat and dates to a list, so that they can be graphed easily when set in ChartJS
-    data_new=data.append(pd.DataFrame({"date": pd.date_range(start=data.date.iloc[-1], periods=fs_forecast_period)}))
-    data_new["prediction"]=preds
+    data_new=data.append(pd.DataFrame({"ds":  [str(a).split(" ")[0] for a in pd.date_range(start=pd.to_datetime(data.ds.iloc[-1]),periods=fs_forecast_period,freq="MS")]   }))
+    print("data new shape: ",data_new.shape)
+    data_new=data_new.reset_index(drop=True)
+    data_new["yhat"]=preds
     data_new["yhat_upper"]=preds
     data_new["yhat_lower"]=preds
     #y_hat = data_new['preds'].tolist()
-    dates = data_new['date'].apply(lambda x: str(x).split(' ')[0]).tolist()
-
+    dates = data_new['ds'].apply(lambda x: str(x).split(' ')[0]).tolist()
+    
     ##### Lets see how the forecast compares to historical performance #####
 
     # First, lets sum up the forecasted metric
@@ -149,10 +157,10 @@ def forecastr(data,forecast_settings,column_headers,freq_val,build_settings):
     #data_for_csv_export = pd.merge(forecast,data,on='date',how='left')
 
     # Select the columns we want to include in the export
-    #export_formatted = data_for_csv_export[['ds','y','yhat','yhat_upper','yhat_lower']]
+    data_new = data_new[['ds','y','yhat','yhat_upper','yhat_lower']]
     
     # Rename y and yhat to the actual metric names
-    data_new.rename(index=str, columns={'date': 'date', 'y': metric, 'yhat': metric + '_forecast','yhat_upper':metric + '_upper_forecast','yhat_lower':metric + '_lower_forecast'}, inplace=True)
+    data_new.rename(index=str, columns={'ds': 'date', 'y': metric, 'yhat': metric + '_forecast','yhat_upper':metric + '_upper_forecast','yhat_lower':metric + '_lower_forecast'}, inplace=True)
 
     # replace NaN with an empty val
     data_new = data_new.replace(np.nan, '', regex=True)
@@ -164,13 +172,10 @@ def forecastr(data,forecast_settings,column_headers,freq_val,build_settings):
     #csv_ready_for_export = export_formatted.to_dict('records')
     csv_ready_for_export = data_new.to_dict('records')
     
-
+    print(data_new.tail())
     # print(y_hat)
     # print(csv_ready_for_export)
-    print(forecasted_vals)
-    print(forecasted_vals_mean)
-    print(preds)
-    print(model)
+    
     return [preds,dates,model,csv_ready_for_export,forecasted_vals, forecasted_vals_mean,data_new]
 
 

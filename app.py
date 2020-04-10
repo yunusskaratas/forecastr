@@ -78,7 +78,7 @@ def forecast_settings(message):
     forecast_settings = data[0] 
     freq = data[2]
     column_headers = data[1]['data'][0]
-    
+    print("column_headers are:",column_headers)
     # Format the date and metric unit
     time_unit = column_headers[0]
     
@@ -105,7 +105,9 @@ def forecast_settings(message):
     print("y:",len(y))
     #print("forecast_settings:",forecast_settings)
     print("column headers:",column_headers)
-    #print("original_dataset:",original_dataset)
+    print("original_dataset:",original_dataset[0])
+    print("freq:",freq)
+    print(data_new.iloc[:,:3])
     #print("csv_export:",csv_export)
     # Send data back to the client
     data_back_to_client = [dates,y_hat,y,forecast_settings,column_headers,freq,original_dataset,csv_export]

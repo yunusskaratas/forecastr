@@ -45,7 +45,16 @@ $(document).ready(function(){
             // Send the data to a python script app.py to process basic statistics on it
             socket.emit('send_csv', {data:csvdata});
 
-           
+            // ****** GOOGLE ANALYTICS EVENT ****** //
+
+            window.dataLayer.push({'event': 'step1-file-uploaded'});
+
+            // After data has been emitted, send the user to the second tab called Step 2: Review Data + Setup Model
+            $('.nav-tabs a[href="#step2"]').tab('show');
+
+            // Then make sure the user is at the top of the page, by scrolling to coordinates (0,0)
+            window.scrollTo(0, 0);
+
           }
         });
 
@@ -204,6 +213,13 @@ $(document).ready(function(){
         $('#metrics-min').html(metric_min);
         $('#metrics-max').html(metric_max);
 
+	// ****** GOOGLE ANALYTICS EVENT ****** //
+
+        // Send this event to the data layer indicating that the original data has been successfully rendered on Step 2.
+        window.dataLayer.push({'event': 'step2-pre-forecast-chart-rendered'});
+
+
+        // TO DO: On click of the logistic option, unhide the upper and lower bounds or saturation points.
 
 
 
@@ -233,7 +249,7 @@ $(document).ready(function(){
             var time_units = $('#days-to-forecast').val();                  // Eg. Number of days to forecast out
             var upper = $('#upper-limit').val();                            // Upper Limit used in logistic forecast
             var lower = $('#lower-limit').val();                            // Lower Limit used in logistic forecast
-	    var test_day= $("#test-day").val();
+	    var test_day= $("#test-day").val();  //deðiþim
 
             // Let's push settings to the selected array
 
@@ -269,6 +285,11 @@ $(document).ready(function(){
 
             // Let's Emit all of the forecast settings and orignal data back to the server side
             socket.emit('forecast_settings', {data:settings});
+
+	    // ****** GOOGLE ANALYTICS EVENT ****** //
+
+            // Send this event to the data layer signifying that the user has clicked the Forecast CTA
+            window.dataLayer.push({'event': 'step2-generate-forecast-cta'});
 
 
             
@@ -449,7 +470,12 @@ $(document).ready(function(){
         console.log(time_to_render_forecast);
 
 
+	 // ****** GOOGLE ANALYTICS EVENT ****** //
 
+        // Send an event to the data layer indicating that the forecast chart has been successfully rendered on Step 3: View Forecast
+        window.dataLayer.push({'event': 'step3-render-forecast',
+                              'dimension1': time_to_render_forecast
+                              });
        
 
 
@@ -529,7 +555,7 @@ $(document).ready(function(){
 
 
             // IMPORTANT: Set data_for_csv_export to blank so not to store multiple csvs for download.
-           //data_for_csv_export = '';
+           data_for_csv_export = '';
 
 
         }); // end of update-chart function
