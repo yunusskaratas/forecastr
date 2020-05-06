@@ -4,9 +4,9 @@ A flask web app that leverages time series algorithms to provide people with the
 
 
 
-### What is forecastr?
+### What is SIRIUS?
 
-<a href='https://forecastr-io.herokuapp.com'>forecastr</a> is an experimental flask app I created as a proof of concept to see what it would take to create a UI on top of Facebook Prophet. It provides the user with a 3 step interface that guides them towards building a baseline forecast with Facebook Prophet.
+It provides the user with a 3 step interface that guides them towards building a baseline forecast with Facebook Prophet.
 
 Here is a screenshot of the app after the user has built a forecast:<br/>
 <img src="https://raw.githubusercontent.com/garethcull/forecastr/master/static/img/app.png" width="1024" />
