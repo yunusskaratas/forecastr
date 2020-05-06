@@ -1,12 +1,6 @@
-# SIRIUS TS
-A flask web app that leverages time series algorithms to provide people with the ability to build simple baseline forecasts from within a guided user interface.
-
-
-
-
 ### What is SIRIUS?
 
-It provides the user with a 3 step interface that guides them towards building a baseline forecast with Facebook Prophet.
+A flask web app that leverages time series algorithms to provide people with the ability to build simple baseline forecasts from within a guided user interface.It provides the user with a 3 step interface that guides them towards building a baseline forecast with Facebook Prophet.
 
 Here is a screenshot of the app after the user has built a forecast:<br/>
 <img src="https://raw.githubusercontent.com/garethcull/forecastr/master/static/img/app.png" width="1024" />
